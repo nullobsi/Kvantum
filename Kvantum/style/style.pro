@@ -1,4 +1,4 @@
-CONFIG += qt \
+CONFIG += qt6 \
           plugin \
           x11 \
           warn_on

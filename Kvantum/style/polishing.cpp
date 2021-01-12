@@ -18,7 +18,7 @@
 #include "Kvantum.h"
 
 #include <QProcess>
-#include <QSvgRenderer>
+#include <QtSvg/QSvgRenderer>
 #include <QApplication>
 #include <QMenu>
 #include <QPushButton>

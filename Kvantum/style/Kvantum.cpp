@@ -21,7 +21,7 @@
 #include <QPainter>
 #include <QSettings>
 #include <QTimer>
-#include <QSvgRenderer>
+#include <QtSvg/QSvgRenderer>
 #include <QApplication>
 #include <QToolBar>
 #include <QMainWindow>
@@ -7914,7 +7914,7 @@ void Style::drawControl(QStyle::ControlElement element,
 
         QFont f(painter->font());
         if (lspec.boldFont) f.setWeight(lspec.boldness);
-        bool isVertical(opt->orientation == Qt::Vertical);
+        bool isVertical((opt->state & QStyle::State_Horizontal) == 0);
         const QProgressBar *pb = qobject_cast<const QProgressBar*>(widget);
         bool inverted(pb && pb->invertedAppearance());
         if ((!isVertical && option->direction == Qt::RightToLeft) // -> CE_ProgressBarGroove

@@ -776,6 +776,9 @@ void WindowManager::widgetMouseRelease (bool inside)
                             Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
   qApp->sendEvent (widgetTarget_.data(), &mouseRelease);
 }
+
+
+
 /*************************/
 bool WindowManager::AppEventFilter::eventFilter (QObject *object, QEvent *event)
 {
@@ -814,4 +817,12 @@ bool WindowManager::AppEventFilter::eventFilter (QObject *object, QEvent *event)
   return false;
 }
 
+
+uint qHash(const WindowManager::ExceptionId &ex, uint seed) {
+    return qHash(ex.first, seed) ^ qHash(ex.second, seed);
+}
+
+    uint qHash(const WindowManager::ExceptionId &ex) {
+        return qHash(ex.first) ^ qHash(ex.second);
+    }
 }

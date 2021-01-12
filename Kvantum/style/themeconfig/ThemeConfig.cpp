@@ -20,7 +20,7 @@
 #include <QApplication>
 #include "ThemeConfig.h"
 #if defined Q_WS_X11 || defined Q_OS_LINUX || defined Q_OS_FREEBSD || defined Q_OS_OPENBSD || defined Q_OS_NETBSD || defined Q_OS_HURD
-#include <QX11Info>
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5,0,0))
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -38,11 +38,7 @@ ThemeConfig::ThemeConfig(const QString& theme) :
   /* For now, the lack of x11 means wayland.
      Later, a better method should be found. */
 #if defined Q_WS_X11 || defined Q_OS_LINUX || defined Q_OS_FREEBSD || defined Q_OS_OPENBSD || defined Q_OS_NETBSD || defined Q_OS_HURD
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-  isX11_ = QX11Info::isPlatformX11();
-#else
   isX11_ = true;
-#endif
 #else
   isX11_ = false;
 #endif
@@ -588,9 +584,11 @@ theme_spec ThemeConfig::getCompositeSpec()
 #if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
   if (isX11_)
   {
-    Atom atom = XInternAtom (QX11Info::display(), "_NET_WM_CM_S0", False);
-    if (XGetSelectionOwner(QX11Info::display(), atom))
+      Display *disp = XOpenDisplay(nullptr);
+    Atom atom = XInternAtom (disp, "_NET_WM_CM_S0", False);
+    if (XGetSelectionOwner(disp, atom))
       compositing = true;
+    XCloseDisplay(disp);
   }
   else
     compositing = true; // wayland is always composited

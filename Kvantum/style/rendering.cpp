@@ -17,7 +17,7 @@
 
 #include "Kvantum.h"
 
-#include <QSvgRenderer>
+#include <QtSvg/QSvgRenderer>
 #include <QPixmapCache>
 #include <QPainter>
 #include <QApplication>

@@ -23,7 +23,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QDockWidget>
-#include <QSvgRenderer>
+#include <QtSvg/QSvgRenderer>
 #include <QMdiSubWindow>
 
 namespace Kvantum
@@ -34,8 +34,7 @@ QIcon Style::standardIcon(QStyle::StandardPixmap standardIcon,
                           const QWidget *widget) const
 {
   bool hdpi(false);
-  if (qApp->testAttribute(Qt::AA_UseHighDpiPixmaps))
-    hdpi = true;
+  hdpi = true;
   qreal pixelRatio = qApp->devicePixelRatio();
   pixelRatio = qMax(pixelRatio, static_cast<qreal>(1));
   const bool rtl(option != nullptr ? option->direction == Qt::RightToLeft

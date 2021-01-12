@@ -26,6 +26,7 @@
 
 namespace Kvantum {
 
+
 class WindowManager: public QObject
 {
   Q_OBJECT
@@ -72,6 +73,25 @@ public:
   bool dragInProgress() const {
     return dragInProgress_;
   }
+    // wrapper for exception id
+    class ExceptionId: public QPair<QString, QString>
+    {
+    public:
+        ExceptionId (const QString &value) {
+            const QStringList args (value.split (QStringLiteral("@")));
+            if (args.isEmpty())
+                return;
+            second = args[0].trimmed();
+            if (args.size() > 1)
+                first = args[1].trimmed();
+        }
+        const QString& appName() const {
+            return first;
+        }
+        const QString& className() const {
+            return second;
+        }
+    };
 
 protected:
   void timerEvent (QTimerEvent *event);
@@ -109,25 +129,7 @@ private:
   int doubleClickInterval_;
   bool isDelayed_;
 
-  // wrapper for exception id
-  class ExceptionId: public QPair<QString, QString>
-  {
-  public:
-    ExceptionId (const QString &value) {
-      const QStringList args (value.split (QStringLiteral("@")));
-      if (args.isEmpty())
-        return;
-      second = args[0].trimmed();
-      if (args.size() > 1)
-        first = args[1].trimmed();
-    }
-    const QString& appName() const {
-      return first;
-    }
-    const QString& className() const {
-      return second;
-    }
-  };
+
 
   typedef QSet<ExceptionId> ExceptionSet;
   ExceptionSet blackList_;
@@ -168,6 +170,10 @@ private:
   /* allow access of all private members to the app event filter */
   friend class AppEventFilter;
 };
+
+    uint qHash(const WindowManager::ExceptionId &ex, uint seed);
+
+    uint qHash(const WindowManager::ExceptionId &ex);
 
 }
 

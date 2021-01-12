@@ -1,10 +1,11 @@
 set(QT_MINIMUM_VERSION "5.9.0")
 
-find_package(Qt5Core "${QT_MINIMUM_VERSION}" REQUIRED)
-find_package (Qt5Widgets REQUIRED)
-find_package (Qt5Gui REQUIRED)
-find_package (Qt5Svg REQUIRED)
-find_package (Qt5LinguistTools QUIET)
+find_package(Qt6 COMPONENTS Core Widgets Gui Svg REQUIRED)
+#find_package(Qt5Core "${QT_MINIMUM_VERSION}" REQUIRED)
+#find_package (Qt5Widgets REQUIRED)
+#find_package (Qt5Gui REQUIRED)
+#find_package (Qt5Svg REQUIRED)
+#find_package (Qt5LinguistTools QUIET)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -12,8 +13,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-                    ${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS}
-                    ${Qt5Gui_INCLUDE_DIRS} ${Qt5Svg_INCLUDE_DIRS})
+                    ${Qt6Core_INCLUDE_DIRS} ${Qt6Widgets_INCLUDE_DIRS}
+                    ${Qt6Gui_INCLUDE_DIRS} ${Qt6Svg_INCLUDE_DIRS})
 
 add_definitions(-DDATADIR="${CMAKE_INSTALL_PREFIX}/share")
 #get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
@@ -48,7 +49,7 @@ else(Qt5LinguistTools_FOUND)
 endif(Qt5LinguistTools_FOUND)
 
 
-target_link_libraries(kvantummanager Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Svg)
+target_link_libraries(kvantummanager Qt6::Widgets Qt6::Core Qt6::Gui Qt6::Svg)
 
 install(TARGETS kvantummanager RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 

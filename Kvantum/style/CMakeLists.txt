@@ -1,14 +1,15 @@
-set(QT_MINIMUM_VERSION "5.9.0")
+#set(QT_MINIMUM_VERSION "5.9.0")
 
 if(NOT ENABLE_QT4)
-  find_package(Qt5Core "${QT_MINIMUM_VERSION}" REQUIRED)
-  find_package(Qt5Widgets REQUIRED)
-  find_package(Qt5Gui REQUIRED)
-  find_package(Qt5Svg REQUIRED)
-  find_package(Qt5X11Extras REQUIRED)
-  if((Qt5Widgets_VERSION GREATER 5.11.0) OR (Qt5Widgets_VERSION EQUAL 5.11.0))
+  find_package(Qt6 COMPONENTS Core Svg Widgets Gui REQUIRED)
+#  find_package(Qt6Core "${QT_MINIMUM_VERSION}" REQUIRED)
+#  find_package(Qt6Widgets REQUIRED)
+#  find_package(Qt6Gui REQUIRED)
+#  find_package(Qt6Svg REQUIRED)
+#  find_package(Qt6X11Extras REQUIRED)
+  #if((Qt5Widgets_VERSION GREATER 5.11.0) OR (Qt5Widgets_VERSION EQUAL 5.11.0))
     find_package(KF5WindowSystem REQUIRED)
-  endif()
+  #endif()
 else()
   find_package(Qt4 4.8.7 REQUIRED)
 
@@ -28,17 +29,14 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/")
 
 if(NOT ENABLE_QT4)
-  get_target_property(REAL_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE}
-                      IMPORTED_LOCATION)
-  execute_process(COMMAND "${REAL_QMAKE_EXECUTABLE}" -query QT_INSTALL_PLUGINS
-                  OUTPUT_VARIABLE _Qt5_PLUGIN_INSTALL_DIR
+  execute_process(COMMAND "qmake-qt6" -query QT_INSTALL_PLUGINS
+                  OUTPUT_VARIABLE _Qt6_PLUGIN_INSTALL_DIR
                   ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
-  set(KVANTUM_STYLE_DIR "${_Qt5_PLUGIN_INSTALL_DIR}/styles/")
+  set(KVANTUM_STYLE_DIR "${_Qt6_PLUGIN_INSTALL_DIR}/styles/")
 
   include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-                      ${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS}
-                      ${Qt5Gui_INCLUDE_DIRS} ${Qt5Svg_INCLUDE_DIRS}
-                      ${Qt5X11Extras_INCLUDE_DIRS}
+                      ${Qt6Core_INCLUDE_DIRS} ${Qt6Widgets_INCLUDE_DIRS}
+                      ${Qt6Gui_INCLUDE_DIRS} ${Qt6Svg_INCLUDE_DIRS}
                       ${X11_INCLUDE_DIR})
 else()
   set(KVANTUM_STYLE_DIR "${QT_PLUGINS_DIR}/styles/")
@@ -51,7 +49,7 @@ endif()
 add_definitions(-DDATADIR="${CMAKE_INSTALL_PREFIX}/share")
 
 if(NOT ENABLE_QT4)
-  if((Qt5Widgets_VERSION GREATER 5.15.0) OR (Qt5Widgets_VERSION EQUAL 5.15.0))
+  if((Qt6Widgets_VERSION GREATER 5.15.0) OR (Qt6Widgets_VERSION EQUAL 5.15.0))
     set(kvantum_SOURCES
         Kvantum.cpp
         eventFiltering.cpp
@@ -101,20 +99,18 @@ else()
 endif()
 
 if(NOT ENABLE_QT4)
-  if((Qt5Widgets_VERSION GREATER 5.11.0) OR (Qt5Widgets_VERSION EQUAL 5.11.0))
-    target_link_libraries(kvantum ${Qt5Core_LIBRARIES}
-                                  ${Qt5Gui_LIBRARIES}
-                                  ${Qt5Widgets_LIBRARIES}
-                                  ${Qt5Svg_LIBRARIES}
-                                  ${Qt5X11Extras_LIBRARIES}
+  if((Qt6Widgets_VERSION GREATER 5.11.0) OR (Qt6Widgets_VERSION EQUAL 5.11.0))
+    target_link_libraries(kvantum ${Qt6Core_LIBRARIES}
+                                  ${Qt6Gui_LIBRARIES}
+                                  ${Qt6Widgets_LIBRARIES}
+                                  ${Qt6Svg_LIBRARIES}
                                   ${X11_LIBRARIES}
                                   KF5::WindowSystem)
   else()
-    target_link_libraries(kvantum ${Qt5Core_LIBRARIES}
-                                  ${Qt5Gui_LIBRARIES}
-                                  ${Qt5Widgets_LIBRARIES}
-                                  ${Qt5Svg_LIBRARIES}
-                                  ${Qt5X11Extras_LIBRARIES}
+    target_link_libraries(kvantum ${Qt6Core_LIBRARIES}
+                                  ${Qt6Gui_LIBRARIES}
+                                  ${Qt6Widgets_LIBRARIES}
+                                  ${Qt6Svg_LIBRARIES}
                                   ${X11_LIBRARIES})
   endif()
 else()
